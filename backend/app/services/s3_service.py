@@ -39,3 +39,14 @@ def generate_presigned_url(key: str, expires_in: int = 600) -> str:
         Params={"Bucket": BUCKET, "Key": key},
         ExpiresIn=expires_in,
     )
+
+
+def upload_bytes(file_bytes: bytes, key: str, content_type: str) -> str:
+    s3.put_object(
+        Bucket=BUCKET,
+        Key=key,
+        Body=file_bytes,
+        ContentType=content_type,
+    )
+
+    return key
