@@ -3,6 +3,7 @@ from app.core.database import SessionLocal
 from app.models.analysis import AnalysisResult
 from app.services.s3_service import generate_presigned_url
 from app.services.vision_service import analyze_image
+from openai import RateLimitError
 
 def run_caption_analysis(asset_id, s3_key):
     db = SessionLocal()
@@ -11,22 +12,38 @@ def run_caption_analysis(asset_id, s3_key):
         image_url = generate_presigned_url(s3_key)
         prompt = "Describe the image clearly."
 
-        # Run async function properly
-        result_text = asyncio.run(
-            analyze_image(image_url, prompt)
-        )
+        try:
+            result_text = asyncio.run(
+                analyze_image(image_url, prompt)
+            )
 
-        analysis = AnalysisResult(
-            asset_id=asset_id,
-            feature_type="caption",
-            prompt_text=prompt,
-            result_data={"text": result_text}
-        )
+            analysis = AnalysisResult(
+                asset_id=asset_id,
+                feature_type="caption",
+                prompt_text=prompt,
+                result_data={
+                    "status": "completed",
+                    "text": result_text,
+                },
+            )
+
+        except RateLimitError:
+            analysis = AnalysisResult(
+                asset_id=asset_id,
+                feature_type="caption",
+                prompt_text=prompt,
+                result_data={
+                    "status": "failed",
+                    "error": "AI rate limit exceeded. Try again later.",
+                },
+            )
 
         db.add(analysis)
         db.commit()
+
     finally:
         db.close()
+
 
 def run_vqa_analysis(asset_id, s3_key, question):
     db = SessionLocal()

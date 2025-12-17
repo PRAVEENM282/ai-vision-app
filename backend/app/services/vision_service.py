@@ -14,7 +14,7 @@ if not os.getenv("OPENAI_API_KEY"):
 
 async def analyze_image(image_url: str, prompt: str) -> str:
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4.1-mini",
         messages=[
             {
                 "role": "user",
