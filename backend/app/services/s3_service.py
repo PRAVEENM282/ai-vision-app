@@ -33,7 +33,7 @@ def upload_file(file_bytes: bytes, content_type: str) -> str:
     return key
 
 
-def generate_presigned_url(key: str, expires_in: int = 600) -> str:
+def generate_presigned_url(key: str, expires_in: int = 3600) -> str:
     return s3.generate_presigned_url(
         "get_object",
         Params={"Bucket": BUCKET, "Key": key},

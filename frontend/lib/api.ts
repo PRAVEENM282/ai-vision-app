@@ -64,3 +64,24 @@ export async function getAnalysisResult(
 
   return res.json();
 }
+
+// NEW: Text-to-Image Generation
+export async function generateTextToImage(prompt: string) {
+  const res = await fetch(
+    `${API_BASE}/generate/text-to-image?prompt=${encodeURIComponent(prompt)}`,
+    { method: "POST" }
+  );
+  if (!res.ok) throw new Error("Image generation failed");
+  return res.json();
+}
+
+
+// NEW: Image Variation Generation
+export async function generateVariation(imageUrl: string, prompt: string) {
+  const res = await fetch(
+    `${API_BASE}/generate/variation?image_url=${encodeURIComponent(imageUrl)}&prompt=${encodeURIComponent(prompt)}`,
+    { method: "POST" }
+  );
+  if (!res.ok) throw new Error("Variation generation failed");
+  return res.json();
+}
