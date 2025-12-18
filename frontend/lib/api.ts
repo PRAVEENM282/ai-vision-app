@@ -5,7 +5,7 @@ export async function uploadImage(file: File) {
   const formData = new FormData();
   formData.append("file", file);
 
-  const res = await fetch(`${API_BASE}/upload`, {
+  const res = await fetch(`${API_BASE}/upload/`, { // Note: Added trailing slash to match FastAPI default
     method: "POST",
     body: formData,
   });
@@ -23,16 +23,36 @@ export async function analyzeCaption(assetId: string) {
     { method: "POST" }
   );
 
-  if (!res.ok) {
-    throw new Error("Caption analysis failed");
-  }
-
+  if (!res.ok) throw new Error("Caption analysis failed");
   return res.json();
 }
 
+// NEW: VQA Function
+export async function analyzeVQA(assetId: string, question: string) {
+  const res = await fetch(
+    `${API_BASE}/analyze/vqa?asset_id=${assetId}&question=${encodeURIComponent(question)}`,
+    { method: "POST" }
+  );
+
+  if (!res.ok) throw new Error("VQA analysis failed");
+  return res.json();
+}
+
+// NEW: OCR Function
+export async function analyzeOCR(assetId: string) {
+  const res = await fetch(
+    `${API_BASE}/analyze/ocr?asset_id=${assetId}`,
+    { method: "POST" }
+  );
+
+  if (!res.ok) throw new Error("OCR analysis failed");
+  return res.json();
+}
+
+// UPDATED: Generic Feature Type
 export async function getAnalysisResult(
   assetId: string,
-  featureType: "caption"
+  featureType: string 
 ) {
   const res = await fetch(
     `${API_BASE}/analyze/result?asset_id=${assetId}&feature_type=${featureType}`

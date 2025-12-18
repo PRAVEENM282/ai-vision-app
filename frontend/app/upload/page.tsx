@@ -6,7 +6,7 @@ import ResultsView from "@/components/ResultsView";
 import Toast from "@/components/Toast";
 
 export default function UploadPage() {
-  const [result, setResult] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
   const [error, setError] = useState("");
 
   return (
@@ -16,14 +16,15 @@ export default function UploadPage() {
       </h1>
 
       <UploadForm
-        onResult={setResult}
+        onResult={setData}
         onError={setError}
       />
 
-      {result && (
+      {data && (
         <ResultsView
-          imageUrl={result.imageUrl}
-          caption={result.caption}
+          imageUrl={data.imageUrl}
+          result={data.result} 
+          mode={data.mode}     
         />
       )}
 
