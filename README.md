@@ -111,3 +111,4 @@ You can interact with the API via the automatic Swagger docs at `http://localhos
 Watch the full walkthrough of the application features, including image upload, analysis (Caption/VQA/OCR), and generation (Text-to-Image/Variation):
 
 [**▶️ Watch Video Demonstration**](https://drive.google.com/file/d/1QG4kFYZOl4_LGplq3zSY6wtufgU_-x5D/view?usp=sharing)
+[**Live App Link**](https://ai-vision-app-jade.vercel.app/)
